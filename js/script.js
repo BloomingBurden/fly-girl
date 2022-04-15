@@ -1,6 +1,8 @@
+'use strict'
+
 let cvs = document.getElementById('canvas');
 let ctx = cvs.getContext("2d");
-let myAudio = document.querySelector('.audio');
+let sound;
 
 let bg = new Image();
 let tentUp = new Image();
@@ -14,11 +16,11 @@ tentBottom.src = "../img/tentacle.png";
 fog.src = '../img/fog-1.png';
 
 let posX = 50,
-    posY = 1,
-    gap = 150,
-    score = 0,
-    scoreBool,
-    difficultOfLevel = {};
+  posY = 1,
+  gap = 150,
+  score = 0,
+  scoreBool,
+  difficultOfLevel = {};
 
 // Нажатие кнопки, чтобы поднять персонажа
 document.addEventListener('keydown', moveUp);
@@ -46,44 +48,45 @@ fogArr[0] = {
 //Функция, которая двигает персонажа
 function draw() {
   ctx.drawImage(bg, 0, 0);
-  ctx.drawImage(girl, posX, posY );
-// Цикл для щупалец
-  for(let i = 0; i < tentArr.length; i++) { 
+  ctx.drawImage(girl, posX, posY);
+  // Цикл для щупалец
+  for (let i = 0; i < tentArr.length; i++) {
     ctx.drawImage(tentUp, tentArr[i].x, tentArr[i].y);
     ctx.drawImage(tentBottom, tentArr[i].x, tentArr[i].y + tentUp.height + gap);
 
     tentArr[i].x = tentArr[i].x - difficultOfLevel.temp;
 
-    if(tentArr[i].x === 350) {
+    if (tentArr[i].x === 350) {
       scoreBool = true;
 
       tentArr.push({
         x: cvs.width,
         y: Math.round((Math.random() * tentUp.height) - tentUp.height)
-      })
+      });
     }
 
-    if(tentArr[i].x <= 40 && tentArr[i].x >= 20 && scoreBool) {
+    if (tentArr[i].x <= 40 && tentArr[i].x >= 20 && scoreBool) {
       score++;
       scoreBool = false;
     }
 
-    if( posX + girl.width >= tentArr[i].x + 50
+    if (posX + girl.width >= tentArr[i].x + 50
       && posX <= tentArr[i].x + tentUp.width
       && (posY <= tentArr[i].y + tentUp.height - 25
-      || posY + girl.height - 20 >= tentArr[i].y + tentUp.height + gap)) {
-        location.reload();
-        return false;
+        || posY + girl.height - 20 >= tentArr[i].y + tentUp.height + gap)) {
+      let checkitout = alert('Your score is ' + score);
+      location.reload();
+      return false;
     }
 
   }
-// Цикл для тумана
+  // Цикл для тумана
   moveFog();
-//Увеличить нас счетчик
+  //Увеличить нас счетчик
   upScore();
 
   posY = posY + difficultOfLevel.up;
-  
+
   requestAnimationFrame(draw);
 }
 
@@ -96,15 +99,15 @@ function upScore() {
 
 //Двигает туман
 function moveFog() {
-  for(let j = 0; j < fogArr.length; j++) {
+  for (let j = 0; j < fogArr.length; j++) {
     ctx.drawImage(fog, fogArr[j].x, 0, 650, 366);
 
     fogArr[j].x = fogArr[j].x - 1;
 
-    if(fogArr[j].x === -1) {
+    if (fogArr[j].x === -1) {
       fogArr.push({
         x: cvs.width
-      })
+      });
     }
   }
 }
@@ -112,27 +115,28 @@ function moveFog() {
 //Выбор героя
 function selectGirl() {
   let witch = document.querySelectorAll('.witches__item a img'),
+      witchLink = document.querySelectorAll('.witches__item a'),
       listWitches = document.querySelector('.witches'),
       arrWitches = ['girlm1', 'girlm2', 'girlm3', 'girlm4'];
 
-  for( let i = 0; i < witch.length; i++ ) {
-    witch[i].onclick = function() {
+  for (let i = 0; i < witch.length; i++) {
+    witchLink[i].onclick = function () {
       listWitches.style.display = 'none';
-      
-      for( let j = 0; j < arrWitches.length; j++ ) {
-        if(witch[i].getAttribute('src').includes(arrWitches[j])) {
+      goSound();
+
+      for (let j = 0; j < arrWitches.length; j++) {
+        if (witch[i].getAttribute('src').includes(arrWitches[j])) {
           girl.src = "../img/" + arrWitches[j] + ".png";
           changeLevel(j);
           return;
         }
-      }   
+      }
     };
   }
 }
 
 function changeLevel(numLevel = 2) {
-
-  switch(numLevel) {
+  switch (numLevel) {
     case 0:
       difficultOfLevel.temp = 2;
       difficultOfLevel.up = 1.5;
@@ -151,15 +155,23 @@ function changeLevel(numLevel = 2) {
     case 3:
       difficultOfLevel.temp = 6;
       difficultOfLevel.up = 3.5;
-      difficultOfLevel.keyDown = 50;
-      break;     
+      difficultOfLevel.keyDown = 55;
+      break;
     default:
-      return 2; 
+      return 2;
   }
 
-  draw();
+  girl.addEventListener('load', draw);
 }
 
-myAudio.volume = 0.1;
 
-tentBottom.onload = selectGirl;
+
+function goSound() {
+  sound = new Audio();
+  sound.src = '../sound/bit.ogg';
+  sound.loop = true;
+  sound.volume = 0.1;
+  sound.play()
+}
+
+fog.addEventListener('load', selectGirl);
