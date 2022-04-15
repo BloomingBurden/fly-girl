@@ -145,12 +145,12 @@ function changeLevel(numLevel = 2) {
     case 1:
       difficultOfLevel.temp = 3;
       difficultOfLevel.up = 2;
-      difficultOfLevel.keyDown = 30;
+      difficultOfLevel.keyDown = 35;
       break;
     case 2:
       difficultOfLevel.temp = 4;
       difficultOfLevel.up = 2.5;
-      difficultOfLevel.keyDown = 40;
+      difficultOfLevel.keyDown = 45;
       break;
     case 3:
       difficultOfLevel.temp = 6;
