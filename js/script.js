@@ -10,10 +10,10 @@ let tentBottom = new Image();
 let girl = new Image();
 let fog = new Image();
 
-bg.src = "fly-girl/img/Background.jpg";
-tentUp.src = "fly-girl/img/tentacleup.png";
-tentBottom.src = "fly-girl/img/tentacle.png";
-fog.src = 'fly-girl/img/fog-1.png';
+bg.src = "img/Background.jpg";
+tentUp.src = "img/tentacleup.png";
+tentBottom.src = "img/tentacle.png";
+fog.src = 'img/fog-1.png';
 
 let posX = 50,
   posY = 1,
@@ -126,7 +126,7 @@ function selectGirl() {
 
       for (let j = 0; j < arrWitches.length; j++) {
         if (witch[i].getAttribute('src').includes(arrWitches[j])) {
-          girl.src = "fly-girl/img/" + arrWitches[j] + ".png";
+          girl.src = "img/" + arrWitches[j] + ".png";
           changeLevel(j);
           return;
         }
@@ -168,7 +168,7 @@ function changeLevel(numLevel = 2) {
 
 function goSound() {
   sound = new Audio();
-  sound.src = 'fly-girl/sound/bit.ogg';
+  sound.src = 'sound/bit.ogg';
   sound.loop = true;
   sound.volume = 0.1;
   sound.play()
