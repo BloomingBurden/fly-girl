@@ -88,6 +88,8 @@ ul {
 
 
 footer {
+  font-family: 'Square Peg', Arial, cursive;
+  font-size: 30px;
   position: fixed;
   z-index: 50;
   bottom: 0;
@@ -95,4 +97,18 @@ footer {
 
   background-color: #222222;
   color: #fff;
+}
+
+.music-creator {
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.music-creator:hover {
+  transition: 0.25s;
+  color: #bdbdbd;
+}
+
+.audio {
+  visibility: hidden;
 }

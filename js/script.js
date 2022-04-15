@@ -1,5 +1,6 @@
 let cvs = document.getElementById('canvas');
 let ctx = cvs.getContext("2d");
+let myAudio = document.querySelector('.audio');
 
 let bg = new Image();
 let tentUp = new Image();
@@ -15,13 +16,15 @@ fog.src = '../img/fog-1.png';
 let posX = 50,
     posY = 1,
     gap = 150,
-    score = 0;
+    score = 0,
+    scoreBool,
+    difficultOfLevel = {};
 
 // Нажатие кнопки, чтобы поднять персонажа
 document.addEventListener('keydown', moveUp);
 
 function moveUp() {
-  posY -= 30;
+  posY -= difficultOfLevel.keyDown;
 }
 
 // Создание щупалец
@@ -43,14 +46,16 @@ fogArr[0] = {
 //Функция, которая двигает персонажа
 function draw() {
   ctx.drawImage(bg, 0, 0);
+  ctx.drawImage(girl, posX, posY );
 // Цикл для щупалец
   for(let i = 0; i < tentArr.length; i++) { 
     ctx.drawImage(tentUp, tentArr[i].x, tentArr[i].y);
     ctx.drawImage(tentBottom, tentArr[i].x, tentArr[i].y + tentUp.height + gap);
 
-    tentArr[i].x = tentArr[i].x - 2;
+    tentArr[i].x = tentArr[i].x - difficultOfLevel.temp;
 
     if(tentArr[i].x === 350) {
+      scoreBool = true;
 
       tentArr.push({
         x: cvs.width,
@@ -58,15 +63,17 @@ function draw() {
       })
     }
 
+    if(tentArr[i].x <= 40 && tentArr[i].x >= 20 && scoreBool) {
+      score++;
+      scoreBool = false;
+    }
+
     if( posX + girl.width >= tentArr[i].x + 50
       && posX <= tentArr[i].x + tentUp.width
       && (posY <= tentArr[i].y + tentUp.height - 25
       || posY + girl.height - 20 >= tentArr[i].y + tentUp.height + gap)) {
-      location.reload();
-    }
-
-    if(tentArr[i].x === 20) {
-      score++;
+        location.reload();
+        return false;
     }
 
   }
@@ -75,9 +82,7 @@ function draw() {
 //Увеличить нас счетчик
   upScore();
 
-  ctx.drawImage(girl, posX, posY );
-
-  posY = posY + 1.5;
+  posY = posY + difficultOfLevel.up;
   
   requestAnimationFrame(draw);
 }
@@ -117,14 +122,44 @@ function selectGirl() {
       for( let j = 0; j < arrWitches.length; j++ ) {
         if(witch[i].getAttribute('src').includes(arrWitches[j])) {
           girl.src = "../img/" + arrWitches[j] + ".png";
-          draw();
-          break;
+          changeLevel(j);
+          return;
         }
       }   
     };
   }
 }
 
+function changeLevel(numLevel = 2) {
 
+  switch(numLevel) {
+    case 0:
+      difficultOfLevel.temp = 2;
+      difficultOfLevel.up = 1.5;
+      difficultOfLevel.keyDown = 25;
+      break;
+    case 1:
+      difficultOfLevel.temp = 3;
+      difficultOfLevel.up = 2;
+      difficultOfLevel.keyDown = 30;
+      break;
+    case 2:
+      difficultOfLevel.temp = 4;
+      difficultOfLevel.up = 2.5;
+      difficultOfLevel.keyDown = 40;
+      break;
+    case 3:
+      difficultOfLevel.temp = 6;
+      difficultOfLevel.up = 3.5;
+      difficultOfLevel.keyDown = 50;
+      break;     
+    default:
+      return 2; 
+  }
+
+  draw();
+}
+
+myAudio.volume = 0.1;
 
 tentBottom.onload = selectGirl;
