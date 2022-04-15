@@ -4,29 +4,21 @@ let ctx = cvs.getContext("2d");
 let bg = new Image();
 let tentUp = new Image();
 let tentBottom = new Image();
-let girl1 = new Image();
-let girl2 = new Image();
-let girl3 = new Image();
-let girl4 = new Image();
+let girl = new Image();
 
 bg.src = "../img/Background.jpg";
 tentUp.src = "../img/tentacleup.png";
 tentBottom.src = "../img/tentacle.png";
-girl1.src = "../img/girlm1.png";
-girl2.src = "../img/girlm2.png";
-girl3.src = "../img/girlm3.png";
-girl4.src = "../img/girlm4.png";
 
 let gap = 140;
 
 
-
-
 function draw(witch) {
+  girl.src = witch;
   ctx.drawImage(bg, 0, 0);
   ctx.drawImage(tentUp, 350, 0);
   ctx.drawImage(tentBottom, 350, tentBottom.height + gap);
-  ctx.drawImage(witch, 20, 100);
+  ctx.drawImage(girl, 20, 100);
 }
 
 function selectGirl() {
@@ -40,7 +32,7 @@ function selectGirl() {
       
       for( let j = 0; j < arrWitches.length; j++ ) {
         if(witch[i].getAttribute('src').includes(arrWitches[j])) {
-          draw(eval('girl' + [j + 1]));
+          draw("../img/" + arrWitches[j] + ".png");
           break;
         }
       }   
@@ -50,4 +42,4 @@ function selectGirl() {
 
 
 
-girl4.onload = selectGirl;
+tentBottom.onload = selectGirl;
