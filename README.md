@@ -6,3 +6,5 @@ The game has 4 difficalty levels: easy, average, hard and how to play? The last 
 Good luck. 
 
 p.s Sometimes witches disappear... just keydown f5... im working to fix it. 
+
+Music is not mine and was created by https://www.youtube.com/watch?v=0UvB-1lrMw8
